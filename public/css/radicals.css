@@ -1,0 +1,70 @@
+.content {
+  grid-area: content;
+  display: flex;
+  padding: 2rem;
+  gap: 2rem;
+  align-items: start;
+
+  section {
+    flex: 1;
+    padding: 1rem;
+    background-color: var(--bg-dark-color);
+    border-radius: 1rem;
+  }
+}
+.section-header {
+  margin-bottom: 1rem;
+}
+
+.practice-list {
+  list-style: none;
+  display: grid;
+  grid-template: repeat(2, 120px) / repeat(2, minmax(150px, 1fr));
+  gap: 0.5rem;
+}
+.radical-ex {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.6rem;
+  background-color: var(--bg-main-color);
+  border-radius: 0.5rem;
+  box-shadow: 1px 1px 2px var(--component-main-color);
+}
+.radical-ex-name {
+  padding-bottom: 0.25rem;
+  border-bottom: 1px solid var(--component-main-color);
+}
+
+.radicals-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th {
+    font-size: 1.1rem;
+    text-align: left;
+  }
+
+  /* columns width */
+  th:nth-child(1) {
+    width: 2rem;
+  }
+  th:nth-child(3) {
+    width: 5rem;
+  }
+  th:nth-child(4) {
+    width: 3rem;
+  }
+
+  th,
+  td {
+    padding: 0.5rem 0.25rem;
+    border-bottom: 1px solid var(--component-main-color);
+    border-right: 1px solid var(--component-main-color);
+  }
+
+  th:last-child,
+  td:last-child {
+    border-right: none;
+  }
+}

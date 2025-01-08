@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radicals</title>
+
+    <link rel="stylesheet" href="public/css/styles.css" />
+    <link rel="stylesheet" href="public/css/radicals.css" />
+  </head>
+  <body>
+    <div class="app">
+      <header>
+        <i class="logo">K</i>
+      </header>
+
+      <nav>
+        <ul class="page-nav">
+          <li class="page-nav-item">
+            <a href="/radicals">R</a>
+          </li>
+          <li class="page-nav-item">
+            <a href="/kanji">K</a>
+          </li>
+        </ul>
+      </nav>
+
+      <div class="content">
+        <section class="practice">
+          <h2 class="section-header">Practice</h2>
+          <ul class="practice-list">
+            <li class="radical-ex">
+              <h3 class="radical-ex-name">Learn radicals</h3>
+              <p class="radical-ex-progress">
+                <span class="progress-count">65 / 208</span>
+                <span class="progress-bar"></span>
+              </p>
+              <p class="radical-ex-last-study">
+                Last study: <span class="last-study-date">15 Dec</span>
+              </p>
+            </li>
+
+            <li class="radical-ex">
+              <h3 class="radical-ex-name">Name radical</h3>
+              <p class="radical-ex-progress">
+                <span class="progress-count">65 / 208</span>
+                <span class="progress-bar"></span>
+              </p>
+              <p class="radical-ex-last-study">
+                Last study: <span class="last-study-date">15 Dec</span>
+              </p>
+            </li>
+
+            <li class="radical-ex">
+              <h3 class="radical-ex-name">Deconstruct kanji</h3>
+              <p class="radical-ex-progress">
+                <span class="progress-count">65 / 208</span>
+                <span class="progress-bar"></span>
+              </p>
+              <p class="radical-ex-last-study">
+                Last study: <span class="last-study-date">15 Dec</span>
+              </p>
+            </li>
+
+            <li class="radical-ex">
+              <h3 class="radical-ex-name">Writing</h3>
+              <p class="radical-ex-progress">
+                <span class="progress-count">65 / 208</span>
+                <span class="progress-bar"></span>
+              </p>
+              <p class="radical-ex-last-study">
+                Last study: <span class="last-study-date">15 Dec</span>
+              </p>
+            </li>
+          </ul>
+        </section>
+
+        <section class="radicals">
+          <h2 class="section-header">
+            Manage radicals
+            <i class="icon">N</i>
+          </h2>
+
+          <table class="radicals-table">
+            <thead>
+              <tr>
+                <th>Radical</th>
+                <th>Meaning(s)</th>
+                <th>Icons</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="radicals-table-body"></tbody>
+          </table>
+        </section>
+      </div>
+    </div>
+
+    <script src="/public/js/radicals.js"></script>
+  </body>
+</html>
