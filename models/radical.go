@@ -7,6 +7,6 @@ type Radical struct {
 }
 
 type RadicalMeaning struct {
-	ID      int
-	Meaning string
+	ID      *int
+	Meaning *string
 }

@@ -5,6 +5,7 @@ go 1.23.3
 require (
 	github.com/gin-gonic/gin v1.10.0
 	github.com/jackc/pgx/v5 v5.7.2
+	golang.org/x/exp v0.0.0-20250106191152-7588d65b2ba8
 )
 
 require (

@@ -6,6 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Index(context *gin.Context) {
-	context.HTML(http.StatusOK, "index.html", nil)
+func Index(c *gin.Context) {
+	c.HTML(http.StatusOK, "index.html", nil)
 }
