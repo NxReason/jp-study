@@ -76,9 +76,9 @@
         </section>
 
         <section class="radicals">
-          <h2 class="section-header">
+          <h2 class="section-header manage-radicals-header">
             Manage radicals
-            <i class="icon">N</i>
+            <i class="btn btn-new-radical" id="btn-new-radical">N</i>
           </h2>
 
           <table class="radicals-table">
@@ -93,6 +93,34 @@
             <tbody id="radicals-table-body"></tbody>
           </table>
         </section>
+      </div>
+
+      <div class="modal" id="modal-radical">
+        <div class="modal-bg">
+          <div class="modal-window">
+            <form id="form-radical" class="form-radical">
+              <!-- GLYPH -->
+              <input
+                type="text"
+                id="input-radical-glyph"
+                class="input-radical-glyph"
+              />
+
+              <!-- NAMES -->
+
+              <label class="label-radical-names">
+                <input type="text" id="input-radical-names" />
+                <span class="label-text">radical names(s)</span>
+              </label>
+
+              <!-- CONTROLS -->
+              <div class="form-controls">
+                <button class="btn" id="btn-save-radical">save</button>
+                <button class="btn" id="btn-close-modal">cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
 

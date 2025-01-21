@@ -6,6 +6,7 @@
 :root {
   --text-color: #ebe7f2;
   --bg-main-color: #242228;
+  --bg-main-t-color: #24222866;
   --bg-dark-color: #1a191c;
   --component-main-color: #6b3acb;
   --component-light-color: #8b61de;
@@ -13,15 +14,39 @@
   --hl-main-color: #4ec7af;
   --hl-light-color: #69d7c1;
   --hl-dark-color: #3eaf99;
-}
-a {
-  color: var(--text-color);
+  --font: 16px 'Host Grotesk', sans-serif;
 }
 
 html {
   background-color: var(--bg-main-color);
   color: var(--text-color);
-  font: 16px 'Host Grotesk', sans-serif;
+  font: var(--font);
+}
+a {
+  color: var(--text-color);
+}
+input {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid var(--text-color);
+  color: var(--text-color);
+  font: inherit;
+}
+input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--component-main-color);
+}
+
+.btn {
+  background-color: var(--component-main-color);
+  border: none;
+  color: var(--text-color);
+  padding: 0.45rem 1rem 0.55rem;
+  font: var(--font);
+}
+.btn:hover {
+  cursor: pointer;
+  background-color: var(--component-dark-color);
 }
 
 .app {
