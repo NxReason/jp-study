@@ -48,27 +48,24 @@ func SaveRadical(conn *pgx.Conn) gin.HandlerFunc {
 }
 
 type DeleteRadicalBody struct {
-	ID int
+	ID int `json:"id"`
 }
 
-func DeleteRadical(c *gin.Context, db *pgx.Conn) {
-	var jsonBody DeleteRadicalBody
-	if err := c.ShouldBindJSON(&jsonBody); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+func DeleteRadical(conn *pgx.Conn) gin.HandlerFunc {
+	rt := models.RadicalTable{ Conn: conn }
+	return func(c *gin.Context) {
+		var jsonBody DeleteRadicalBody
+		if err := c.ShouldBindJSON(&jsonBody); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 
-	query := `DELETE FROM radicals WHERE id = $1`
-	tag, err := db.Exec(c, query, jsonBody.ID)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+		err := rt.Delete(c, jsonBody.ID)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H { "message": err })
+		}
 
-	if tag.RowsAffected() != 1 {
-		c.JSON(http.StatusOK, gin.H { "message": "No radical with this id" })
-		return
+		c.JSON(http.StatusOK, gin.H { "message": "Radical removed successfully" })
 	}
-
-	c.JSON(http.StatusOK, gin.H { "message": "Radical removed successfully" })
+	
 }

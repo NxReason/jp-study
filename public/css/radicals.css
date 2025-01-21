@@ -63,18 +63,18 @@
 
   /* columns width */
   th:nth-child(1) {
-    width: 2rem;
+    width: 6rem;
   }
   th:nth-child(3) {
-    width: 5rem;
+    width: 8rem;
   }
   th:nth-child(4) {
-    width: 3rem;
+    width: 6rem;
   }
 
   th,
   td {
-    padding: 0.5rem 0.25rem;
+    padding: 0.5rem 0.5rem;
     border-bottom: 1px solid var(--component-main-color);
     border-right: 1px solid var(--component-main-color);
   }
@@ -83,6 +83,30 @@
   td:last-child {
     border-right: none;
   }
+
+  .glyph-cell {
+    text-align: center;
+  }
+  .controls-cell {
+    padding: 0 1.6rem;
+  }
+}
+
+.icon-edit,
+.icon-remove {
+  transition: transform 0.15s ease-in-out;
+}
+.icon-edit:hover,
+.icon-remove:hover {
+  cursor: pointer;
+  transform: scale(1.2);
+}
+.icon-edit {
+  background-image: url('/public/icons/edit.svg');
+  margin-right: 0.5rem;
+}
+.icon-remove {
+  background-image: url('/public/icons/remove.svg');
 }
 
 /* MODAL */

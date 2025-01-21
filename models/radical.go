@@ -1,6 +1,7 @@
 package models
 
 import (
+	"errors"
 	"log"
 
 	"github.com/gin-gonic/gin"
@@ -107,4 +108,18 @@ func (rt *RadicalTable) Save(c *gin.Context, glyph string, meanings []string) (R
 	newRadical.Meanings = newMeanings
 
 	return newRadical, nil
+}
+
+func (rt *RadicalTable) Delete(c *gin.Context, id int) error {
+	query := `DELETE FROM radicals WHERE id = $1`
+	tag, err := rt.Conn.Exec(c, query, id)
+	if err != nil {
+		return err
+	}
+
+	if tag.RowsAffected() != 1 {
+		return errors.New("No radical with this id")
+	}
+
+	return nil
 }

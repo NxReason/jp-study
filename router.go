@@ -14,7 +14,5 @@ func InitRoutes(router *gin.Engine, server *Server) {
 	radicalRouter := router.Group("/api/radicals")
 	radicalRouter.GET("/", ctr.GetRadicals(server.dbConn))
 	radicalRouter.POST("/", ctr.SaveRadical(server.dbConn))
-	radicalRouter.DELETE("/", func(c *gin.Context) {
-		ctr.DeleteRadical(c, server.dbConn)
-	})
+	radicalRouter.DELETE("/", ctr.DeleteRadical(server.dbConn))
 }
