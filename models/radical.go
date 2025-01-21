@@ -123,3 +123,33 @@ func (rt *RadicalTable) Delete(c *gin.Context, id int) error {
 
 	return nil
 }
+
+func (rt *RadicalTable) Update(c *gin.Context, radical Radical) (Radical, error) {
+	// remove old meanings
+	query := `DELETE FROM radical_meanings WHERE radical_id = $1`
+	_, err := rt.Conn.Exec(c, query, radical.ID)
+	if err != nil {
+		return Radical{}, err
+	}
+	// insert new meanings
+	query = `INSERT INTO radical_meanings (meaning, radical_id) VALUES($1, $2) RETURNING id, meaning`
+	rms := make([]RadicalMeaning, 0)
+	var rm RadicalMeaning
+	for _, m := range radical.Meanings {
+		err := rt.Conn.QueryRow(c, query, m.Meaning, radical.ID).Scan(&rm.ID, &rm.Meaning)
+		if err != nil {
+			return Radical{}, err
+		}
+		rms = append(rms, rm)
+	}
+
+	// update glyph
+	query = `UPDATE radicals SET glyph = $1 WHERE id = $2 RETURNING id, glyph`
+	var r Radical
+	err = rt.Conn.QueryRow(c, query, radical.Glyph, radical.ID).Scan(&r.ID, &r.Glyph)
+	if err != nil {
+		return Radical{}, err
+	}
+	r.Meanings = rms
+	return r, nil
+}

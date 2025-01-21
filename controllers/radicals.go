@@ -62,10 +62,27 @@ func DeleteRadical(conn *pgx.Conn) gin.HandlerFunc {
 
 		err := rt.Delete(c, jsonBody.ID)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H { "message": err })
+			c.JSON(http.StatusInternalServerError, gin.H { "message": err.Error() })
 		}
 
 		c.JSON(http.StatusOK, gin.H { "message": "Radical removed successfully" })
 	}
-	
+}
+
+func UpdateRadical(conn *pgx.Conn) gin.HandlerFunc {
+	rt := models.RadicalTable { Conn: conn }
+	return func (c *gin.Context) {
+		var jsonBody models.Radical;
+		if err := c.ShouldBindJSON(&jsonBody); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H { "error": err.Error() })
+		}
+
+		radical, err := rt.Update(c, jsonBody);
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H { "error": err.Error() })
+			return
+		}
+
+		c.JSON(http.StatusOK, gin.H { "radical": radical })
+	}
 }
