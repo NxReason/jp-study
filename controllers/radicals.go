@@ -1,52 +1,23 @@
 package controllers
 
 import (
-	"log"
 	"net/http"
-
-	"golang.org/x/exp/maps"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jackc/pgx/v5"
 
 	"jp.study/m/v2/models"
+	vm "jp.study/m/v2/viewmodels"
 )
 
-func GetRadicals(c *gin.Context, db *pgx.Conn) {
-	query := `
-	SELECT r.id, r.glyph, rm.id as rm_id, rm.meaning as rm
-	FROM radicals r
-	LEFT JOIN radical_meanings rm ON r.id = rm.radical_id`
 
-	rows, err := db.Query(c, query)
-	if err != nil {
-		log.Fatalf("Query failed: %v\n", err)
+func GetRadicals(conn *pgx.Conn) gin.HandlerFunc {
+	rt := models.RadicalTable{ Conn: conn }
+	return func (c *gin.Context) {
+		radicals := rt.All(c)
+		radicalsView := vm.RadicalList(radicals)
+		c.JSON(http.StatusOK, gin.H{"radicals": radicalsView })
 	}
-	defer rows.Close()
-
-	radicalsMap := make(map[int]models.Radical)
-	for rows.Next() {
-		var radical models.Radical
-		var rm models.RadicalMeaning
-
-		err := rows.Scan(&radical.ID, &radical.Glyph, &rm.ID, &rm.Meaning)
-		if err != nil {
-			log.Fatalf("Scanning rows failed %v\n", err)
-		}
-
-		if rm.ID != nil {
-			radical.Meanings = append(radical.Meanings, rm)
-		}
-		if _, exists := radicalsMap[radical.ID]; !exists {
-			radicalsMap[radical.ID] = radical
-		} else {
-			oldRadical := radicalsMap[radical.ID]
-			radical.Meanings = append(oldRadical.Meanings, rm)
-			radicalsMap[radical.ID] = radical
-		}
-	}
-
-	c.JSON(http.StatusOK, gin.H{"radicals": maps.Values(radicalsMap)})
 }
 
 type NewRadicalBody struct {
@@ -54,58 +25,26 @@ type NewRadicalBody struct {
 	Meanings []string `json:"meanings"`
 }
 
-func SaveRadical(c *gin.Context, db *pgx.Conn) {
-	var radicalJSON NewRadicalBody
+func SaveRadical(conn *pgx.Conn) gin.HandlerFunc {
+	rt := models.RadicalTable{ Conn: conn }
 
-	if err := c.ShouldBindJSON(&radicalJSON); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
+	return func(c *gin.Context) {
 
-	// save new radical
-	var id int
-	query := `INSERT INTO radicals (glyph) VALUES ($1) RETURNING id`
-	err := db.QueryRow(c, query, radicalJSON.Glyph).Scan(&id)
-	if err != nil { 
-		c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
-		return
-	}
+		var radicalJSON NewRadicalBody
 
-	// save meanings
-	query = `INSERT INTO radical_meanings (meaning, radical_id) VALUES ($1, $2)`
-	for _, rm := range radicalJSON.Meanings {
-		_, err = db.Exec(c, query, rm, id)
-		if err != nil {
-			c.JSON(http.StatusBadRequest, gin.H {"error": err.Error()})
+		if err := c.ShouldBindJSON(&radicalJSON); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-	}
-	
 
-	// get saved radical with its meanings
-	query = `
-	SELECT r.id, r.glyph, rm.id, rm.meaning 
-	FROM radicals r
-	LEFT JOIN radical_meanings rm
-	ON r.id = rm.radical_id
-	WHERE r.id = $1`
-	rows, err := db.Query(c, query, id)
-	if err != nil { return } // TODO: bad request
-
-	var newRadical models.Radical
-	var newRM models.RadicalMeaning
-	var meanings []models.RadicalMeaning
-	for rows.Next() {
-		err = rows.Scan(nil, nil, &newRM.ID, &newRM.Meaning)
+		newRadical, err := rt.Save(c, radicalJSON.Glyph, radicalJSON.Meanings)
 		if err != nil {
-			log.Fatalf("Scanning rows failed %v\n", err)
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Database error. Couldn't save new radical"})
+			return
 		}
-		meanings = append(meanings, newRM)
-	}
-	rows.Scan(&newRadical.ID, &newRadical.Glyph, nil, nil)
-	newRadical.Meanings = meanings
 
-	c.JSON(http.StatusOK, gin.H{"message": "Radical saved", "radical": newRadical})
+		c.JSON(http.StatusOK, gin.H{"message": "Radical saved", "radical": newRadical})
+	}
 }
 
 type DeleteRadicalBody struct {

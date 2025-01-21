@@ -20,7 +20,7 @@ func main() {
 		port = "8080"
 	}
 	
-	server := Server{ dbConn: nil }
+	server := Server{}
 	server.DbConnect(connString)
 	server.SetRouter()
 	server.Start(port)

@@ -21,8 +21,6 @@ const Radicals = {
     this.populateTable();
   },
   populateTable() {
-    console.log(this.radicals);
-
     const rows = this.radicals.map(this.createRow);
     this.$container.append(...rows);
   },
